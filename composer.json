@@ -1,0 +1,26 @@
+{
+  "name": "bepsvpt/website-url-checker",
+  "description": "Website url checker.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "BePsvPT",
+      "email": "freedom@csie.io"
+    }
+  ],
+  "require": {
+    "php": ">5.5.9",
+    "guzzlehttp/guzzle": "^6.1",
+    "illuminate/support": "^5.2",
+    "league/climate": "^3.2",
+    "sabre/uri": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bepsvpt\\WebsiteUrlChecker\\": "src/"
+    }
+  }
+}
