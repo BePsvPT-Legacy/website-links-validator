@@ -138,7 +138,7 @@ class Checker
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             $pos = strrchr($url, '.');
 
-            if ($pos === false || ! in_array(substr($pos, 1 ), ['flv', 'pdf', 'jpg'])) {
+            if ($pos === false || ! in_array(substr($pos, 1), ['flv', 'pdf', 'jpg'])) {
                 $this->errors[504][] = $url;
             }
         }
