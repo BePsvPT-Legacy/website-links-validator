@@ -1,6 +1,7 @@
 {
   "name": "bepsvpt/website-url-checker",
   "description": "Website url checker.",
+  "keywords": ["checker", "url", "uri"],
   "license": "MIT",
   "authors": [
     {
