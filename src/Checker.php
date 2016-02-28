@@ -99,8 +99,8 @@ class Checker
      */
     protected function parseConfig(array $config)
     {
-        $config['deep'] = isset($config['deep']) ? $config['deep'] : 3;
-        $config['timeout'] = isset($config['timeout']) ? $config['timeout'] : 10.0;
+        $config['deep'] = isset($config['deep']) ? intval($config['deep']) : 3;
+        $config['timeout'] = isset($config['timeout']) ? floatval($config['timeout']) : 10.0;
 
         return $config;
     }
@@ -110,8 +110,9 @@ class Checker
      *
      * @param string $url
      * @param int $deep
+     * @param string $parent
      */
-    protected function analysis($url, $deep = 0)
+    protected function analysis($url, $deep = 0, $parent = 'root')
     {
         $this->visited[] = $url;
 
@@ -123,8 +124,8 @@ class Checker
             $status = $response->getStatusCode();
 
             if ($status < 200 || $status >= 300) {
-                $this->errors[$status][] = $url;
-            } elseif ($this->config['deep'] > $deep) {
+                $this->errors[$parent][$status][] = $url;
+            } elseif (starts_with($response->getHeaderLine('content-type'), 'text/html') && $this->config['deep'] > $deep) {
                 $domUrls = $this->getDomUrls($url, $response->getBody()->getContents());
 
                 foreach ($domUrls as $domUrl) {
@@ -132,14 +133,14 @@ class Checker
                         continue;
                     }
 
-                    $this->analysis($domUrl['url'], $deep + 1);
+                    $this->analysis($domUrl['url'], $deep + 1, $url);
                 }
             }
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             $pos = strrchr($url, '.');
 
             if ($pos === false || ! in_array(substr($pos, 1), ['flv', 'pdf', 'jpg'])) {
-                $this->errors[504][] = $url;
+                $this->errors[$parent][504][] = $url;
             }
         }
     }
@@ -153,9 +154,13 @@ class Checker
      */
     protected function getDomUrls($baseUrl, $string)
     {
+        // Remove all html comments.
         $string = preg_replace('#<!--.*-->#isU', '', $string);
 
+        // Store all links to $matches variable.
         preg_match_all('#(src|href)="(.*)"#iU', $string, $matches);
+
+        $isOriginalHost = $this->host === \Sabre\Uri\parse($baseUrl)['host'];
 
         foreach ($matches[2] as $match) {
             try {
@@ -166,7 +171,7 @@ class Checker
                 if (in_array($components['scheme'], ['http', 'https'])) {
                     $urls[] = [
                         'url' => is_null($components['fragment']) ? $url : strstr($url, '#', true),
-                        'external' => $this->host !== $components['host'],
+                        'external' => ! $isOriginalHost,
                     ];
                 }
             } catch (\Error $e) {
