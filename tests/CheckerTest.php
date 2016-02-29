@@ -35,7 +35,7 @@ class CheckerTest extends PHPUnit_Framework_TestCase
      */
     public function getDomUrls_should_return_all_links_from_html_dom()
     {
-        $dom = <<<EOF
+        $dom = <<<'EOF'
 <!doctype html>
 <html>
     <body>
