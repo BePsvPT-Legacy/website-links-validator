@@ -50,12 +50,14 @@ class Checker
      * @param string $url
      * @param array $config
      * @return array
+     *
+     * @codeCoverageIgnore
      */
     public static function check($url, array $config = [])
     {
-        $checker = new self($url, $config);
+        $checker = new self($config);
 
-        $checker->analysis($checker->url);
+        $checker->setUrl($url)->analysis($checker->url);
 
         return $checker->errors;
     }
@@ -63,13 +65,10 @@ class Checker
     /**
      * Checker constructor.
      *
-     * @param string $url
      * @param array $config
      */
-    public function __construct($url, array $config = [])
+    public function __construct(array $config = [])
     {
-        $this->init($url);
-
         $this->config = $this->parseConfig($config);
 
         $this->client = new Client([
@@ -80,15 +79,18 @@ class Checker
     }
 
     /**
-     * Normalize the url and set the host.
+     * Set the url and host.
      *
      * @param string $url
+     * @return $this
      */
-    protected function init($url)
+    public function setUrl($url)
     {
         $this->url = $this->normalize($url);
 
         $this->host = \Sabre\Uri\parse($this->url)['host'];
+
+        return $this;
     }
 
     /**
@@ -111,6 +113,8 @@ class Checker
      * @param string $url
      * @param int $deep
      * @param string $parent
+     *
+     * @codeCoverageIgnore
      */
     protected function analysis($url, $deep = 0, $parent = 'root')
     {
@@ -152,7 +156,7 @@ class Checker
      * @param string $string
      * @return array
      */
-    protected function getDomUrls($baseUrl, $string)
+    public function getDomUrls($baseUrl, $string)
     {
         // Remove all html comments.
         $string = preg_replace('#<!--.*-->#isU', '', $string);
@@ -190,5 +194,13 @@ class Checker
     protected function normalize($url)
     {
         return \Sabre\Uri\normalize($url);
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 }
