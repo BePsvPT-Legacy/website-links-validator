@@ -1,10 +1,11 @@
 <?php
 
-namespace Bepsvpt\WebsiteUrlChecker;
+namespace Bepsvpt\WebsiteLinksValidator;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
-class Checker
+class Validator
 {
     /**
      * @var Client
@@ -53,13 +54,13 @@ class Checker
      *
      * @codeCoverageIgnore
      */
-    public static function check($url, array $config = [])
+    public static function validate($url, array $config = [])
     {
-        $checker = new self($config);
+        $validator = new self($config);
 
-        $checker->setUrl($url)->analysis($checker->url);
+        $validator->setUrl($url)->analysis($validator->url);
 
-        return $checker->errors;
+        return $validator->errors;
     }
 
     /**
@@ -140,7 +141,7 @@ class Checker
                     $this->analysis($domUrl['url'], $deep + 1, $url);
                 }
             }
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
+        } catch (RequestException $e) {
             $pos = strrchr($url, '.');
 
             if ($pos === false || ! in_array(substr($pos, 1), ['flv', 'pdf', 'jpg'])) {

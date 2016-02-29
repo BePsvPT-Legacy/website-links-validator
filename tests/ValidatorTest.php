@@ -1,8 +1,8 @@
 <?php
 
-use Bepsvpt\WebsiteUrlChecker\Checker;
+use Bepsvpt\WebsiteLinksValidator\Validator;
 
-class CheckerTest extends PHPUnit_Framework_TestCase
+class ValidatorTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -12,22 +12,22 @@ class CheckerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'deep' => 3,
             'timeout' => 10.0,
-        ], (new Checker())->getConfig());
+        ], (new Validator())->getConfig());
 
         $this->assertEquals([
             'deep' => 5,
             'timeout' => 10.0,
-        ], (new Checker(['deep' => 5]))->getConfig());
+        ], (new Validator(['deep' => 5]))->getConfig());
 
         $this->assertEquals([
             'deep' => 3,
             'timeout' => 7.5,
-        ], (new Checker(['timeout' => 7.5]))->getConfig());
+        ], (new Validator(['timeout' => 7.5]))->getConfig());
 
         $this->assertEquals([
             'deep' => 4,
             'timeout' => 3.0,
-        ], (new Checker(['deep' => 4, 'timeout' => 3.0]))->getConfig());
+        ], (new Validator(['deep' => 4, 'timeout' => 3.0]))->getConfig());
     }
 
     /**
@@ -36,7 +36,7 @@ class CheckerTest extends PHPUnit_Framework_TestCase
     public function getDomUrls_should_return_all_links_from_html_dom()
     {
         $dom = <<<'EOF'
-<!doctype html>
+<!DOCTYPE html>
 <html>
     <body>
         <a href="https://www.google.com">google</a>
@@ -52,7 +52,7 @@ class CheckerTest extends PHPUnit_Framework_TestCase
 </html>
 EOF;
 
-        $checker = (new Checker)->setUrl('http://localhost/');
+        $checker = (new Validator)->setUrl('http://localhost/');
 
         $this->assertEquals([
             ['url' => 'https://www.google.com', 'external' => false],

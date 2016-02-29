@@ -1,6 +1,6 @@
 <?php
 
-namespace Bepsvpt\WebsiteUrlChecker;
+namespace Bepsvpt\WebsiteLinksValidator;
 
 use League\CLImate\CLImate;
 
@@ -31,7 +31,7 @@ class Console
         $results = [];
 
         foreach ($this->getUrls() as $url) {
-            $results[$url] = Checker::check($url, $config);
+            $results[$url] = Validator::validate($url, $config);
         }
 
         $this->outputResult($config['savePath'], $results);
@@ -45,14 +45,14 @@ class Console
     protected function getConfig()
     {
         return [
-            'deep' => intval($this->console->input('How deep should we check [3]:')->prompt()) ?: 3,
+            'deep' => intval($this->console->input('How deep should we validate [3]:')->prompt()) ?: 3,
             'timeout' => floatval($this->console->input('The http timeout seconds [10.0]:')->prompt()) ?: 10.0,
             'savePath' => $this->console->input('The path to save the result file (use stdout to show to console) [./]:')->prompt() ?: './',
         ];
     }
 
     /**
-     * Get the urls that should check.
+     * Get the urls that should validate.
      *
      * @return array
      */

@@ -1,7 +1,7 @@
 {
-  "name": "bepsvpt/website-url-checker",
-  "description": "Website url checker.",
-  "keywords": ["checker", "url", "uri"],
+  "name": "bepsvpt/website-links-validator",
+  "description": "Validate links from a given website.",
+  "keywords": ["validate", "validator", "checker", "link", "url", "uri"],
   "license": "MIT",
   "authors": [
     {
@@ -21,7 +21,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Bepsvpt\\WebsiteUrlChecker\\": "src/"
+      "Bepsvpt\\WebsiteLinksValidator\\": "src/"
     }
   },
   "autoload-dev": {
