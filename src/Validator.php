@@ -180,6 +180,7 @@ class Validator
                     ];
                 }
             } catch (\Error $e) {
+            } catch (\Exception $e) {
             }
         }
 
