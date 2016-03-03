@@ -168,19 +168,19 @@ class Validator
         $isOriginalHost = $this->host === \Sabre\Uri\parse($baseUrl)['host'];
 
         foreach ($matches[2] as $match) {
-            try {
-                $url = \Sabre\Uri\resolve($baseUrl, $match);
+            if (false === parse_url($match)) {
+                continue;
+            }
 
-                $components = \Sabre\Uri\parse($url);
+            $url = \Sabre\Uri\resolve($baseUrl, $match);
 
-                if (in_array($components['scheme'], ['http', 'https'])) {
-                    $urls[] = [
-                        'url' => is_null($components['fragment']) ? $url : strstr($url, '#', true),
-                        'external' => ! $isOriginalHost,
-                    ];
-                }
-            } catch (\Error $e) {
-            } catch (\Exception $e) {
+            $components = \Sabre\Uri\parse($url);
+
+            if (in_array($components['scheme'], ['http', 'https'])) {
+                $urls[] = [
+                    'url' => is_null($components['fragment']) ? $url : strstr($url, '#', true),
+                    'external' => ! $isOriginalHost,
+                ];
             }
         }
 
