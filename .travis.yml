@@ -15,7 +15,7 @@ php:
 before_script:
   - composer self-update
   - composer install --no-interaction
-  - php -S localhost ~/tests/public &
+  - sudo php -S localhost:80 -t ~/tests/public &
 
 # Commands you want to run that will verify your build.
 script: phpunit
