@@ -1,22 +1,21 @@
-# Notifications
 notifications:
   email:
     on_success: never
     on_failure: always
 
-# Required to run your project under the correct environment.
 language: php
 
-# Versions of PHP you want your project run with.
 php:
   - 5.5
   - 5.6
   - 7.0
+  - hhvm
+  - nightly
 
-# Commands to be run before your environment runs.
 before_script:
   - composer self-update
   - composer install --no-interaction
+  - php -S localhost ~/tests/public &
 
 # Commands you want to run that will verify your build.
 script: phpunit

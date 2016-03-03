@@ -70,4 +70,14 @@ EOF;
             ['url' => 'https://www.google.com/hello/link4.php', 'external' => true],
         ], $checker->getDomUrls('https://www.google.com/hello/world/', $dom));
     }
+
+    /**
+     * @test
+     */
+    public function it_should_return_the_validate_result()
+    {
+        $result = Validator::validate('http://localhost:8000/index.html');
+
+        $this->assertEquals([], $result);
+    }
 }
