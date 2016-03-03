@@ -13,7 +13,7 @@ php:
 
 before_script:
   - composer self-update
-  - composer install --no-interaction
+  - composer install --no-interaction --prefer-source --dev
   - php -S localhost:8000 -t ./tests/public > /dev/null 2>&1 &
 
 script: phpunit --coverage-clover=coverage.xml
