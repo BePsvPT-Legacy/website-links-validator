@@ -9,12 +9,11 @@ php:
   - 5.5
   - 5.6
   - 7.0
-  - hhvm
   - nightly
 
 before_script:
   - composer self-update
   - composer install --no-interaction
-  - php -S localhost:8000 -t ./tests/public &
+  - php -S localhost:8000 -t ./tests/public &> /dev/null
 
 script: phpunit
