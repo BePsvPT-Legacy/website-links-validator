@@ -76,7 +76,7 @@ EOF;
      */
     public function it_should_return_the_validate_result()
     {
-        $result = Validator::validate('http://localhost:8000/index.html');
+        $result = Validator::validate('http://localhost:8000/index.html', ['timeout' => 1.5]);
 
         $this->assertEquals([
             'http://localhost:8000/index.html' => [
@@ -84,6 +84,9 @@ EOF;
                     'http://localhost:8000/assets/all.css',
                     'http://localhost:8000/link1.html',
                     'http://localhost:8000/link3.html',
+                ],
+                504 => [
+                    'http://speedtest.reliableservers.com/100MBtest.bin',
                 ],
             ],
         ], $result);

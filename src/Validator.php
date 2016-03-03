@@ -51,8 +51,6 @@ class Validator
      * @param string $url
      * @param array $config
      * @return array
-     *
-     * @codeCoverageIgnore
      */
     public static function validate($url, array $config = [])
     {
@@ -114,8 +112,6 @@ class Validator
      * @param string $url
      * @param int $deep
      * @param string $parent
-     *
-     * @codeCoverageIgnore
      */
     protected function analysis($url, $deep = 0, $parent = 'root')
     {
