@@ -76,14 +76,14 @@ EOF;
      */
     public function it_should_return_the_validate_result()
     {
-        $result = Validator::validate('http://localhost/index.html');
+        $result = Validator::validate('http://localhost:8000/index.html');
 
         $this->assertEquals([
-            'http://localhost/index.html' => [
+            'http://localhost:8000/index.html' => [
                 404 => [
-                    'http://localhost/assets/all.css',
-                    'http://localhost/link1.html',
-                    'http://localhost/link3.html',
+                    'http://localhost:8000/assets/all.css',
+                    'http://localhost:8000/link1.html',
+                    'http://localhost:8000/link3.html',
                 ],
             ],
         ], $result);
