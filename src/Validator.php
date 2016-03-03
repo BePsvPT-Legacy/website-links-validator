@@ -121,8 +121,6 @@ class Validator
     {
         $this->visited[] = $url;
 
-        echo "Checking(deep {$deep}): ".str_limit($url, 64).PHP_EOL;
-
         try {
             $response = $this->client->get($url);
 
