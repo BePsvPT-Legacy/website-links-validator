@@ -76,7 +76,7 @@ EOF;
      */
     public function it_should_return_the_validate_result()
     {
-        $result = Validator::validate('http://localhost:8000/index.html', ['timeout' => 3]);
+        $result = Validator::validate('http://localhost:8000/index.html', ['timeout' => 2]);
 
         $this->assertEquals([
             'http://localhost:8000/index.html' => [
