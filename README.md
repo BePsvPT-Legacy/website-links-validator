@@ -12,6 +12,7 @@ Validate links from a given website.
 - [Usage](#usage)
 - [Config](#config)
 - [Testing](#testing)
+- [License](#license)
 
 ## Installation
 
@@ -54,3 +55,7 @@ After service a web server, using phpunit to run the testing
 ```bash
 phpunit
 ```
+
+## License
+
+Laravel Security Header is licensed under [The MIT License (MIT)](LICENSE).
