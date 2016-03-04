@@ -6,6 +6,13 @@
 
 Validate links from a given website.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Config](#config)
+- [Testing](#testing)
+
 ## Installation
 
 ```bash
@@ -32,4 +39,18 @@ php validate.php
 deep: how deep it should validate, default 3
 
 timeout: the http timeout seconds, default 10.0 seconds
+```
+
+## Testing
+
+Note: The testing need a web server on localhost:8000 to complete the testing, the easiest way is using php built-in web server
+
+```bash
+php -S localhost:8000 -t ./tests/public
+```
+
+After service a web server, using phpunit to run the testing
+
+```bash
+phpunit
 ```
