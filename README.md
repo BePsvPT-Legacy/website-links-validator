@@ -37,7 +37,7 @@ php validate.php
 ## Config
 
 |   name  |         description         | default value |
-|:-------:|:---------------------------:|:-------------:|
+|:-------:|-----------------------------|:-------------:|
 |   deep  | how deep it should validate |       3       |
 | timeout | the http timeout seconds    |      10.0     |
 
