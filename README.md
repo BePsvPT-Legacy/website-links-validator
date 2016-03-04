@@ -36,11 +36,10 @@ php validate.php
 
 ## Config
 
-```
-deep: how deep it should validate, default 3
-
-timeout: the http timeout seconds, default 10.0 seconds
-```
+|   name  |         description         | default value |
+|:-------:|:---------------------------:|:-------------:|
+|   deep  | how deep it should validate |       3       |
+| timeout | the http timeout seconds    |      10.0     |
 
 ## Testing
 
