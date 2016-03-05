@@ -12,11 +12,45 @@ class Console
     protected $console;
 
     /**
+     * CLI arguments.
+     *
+     * @var array
+     */
+    private $arguments = [
+        'deep' => [
+            'longPrefix'   => 'deep',
+            'description'  => 'How deep it should validate',
+            'defaultValue' => 3,
+            'castTo'      => 'int',
+        ],
+        'timeout' => [
+            'longPrefix'  => 'timeout',
+            'description' => 'The http timeout seconds',
+            'defaultValue' => 10.0,
+            'castTo'      => 'float',
+        ],
+        'outputPath' => [
+            'longPrefix'  => 'output-path',
+            'description' => 'The path to save the result file (use stdout to display on console)',
+            'defaultValue' => './',
+            'castTo'      => 'string',
+        ],
+        'help' => [
+            'prefix'      => 'h',
+            'longPrefix'  => 'help',
+            'description' => 'Display this information',
+            'noValue'     => true,
+        ],
+    ];
+
+    /**
      * Console constructor.
      */
     public function __construct()
     {
         $this->console = new CLImate;
+
+        $this->console->arguments->add($this->arguments);
     }
 
     /**
@@ -44,10 +78,18 @@ class Console
      */
     protected function getConfig()
     {
+        $this->console->arguments->parse();
+
+        if ($this->console->arguments->defined('help')) {
+            $this->console->usage();
+
+            exit();
+        }
+
         return [
-            'deep' => intval($this->console->input('How deep should we validate [3]:')->prompt()) ?: 3,
-            'timeout' => floatval($this->console->input('The http timeout seconds [10.0]:')->prompt()) ?: 10.0,
-            'savePath' => $this->console->input('The path to save the result file (use stdout to show to console) [./]:')->prompt() ?: './',
+            'deep' => $this->console->arguments->get('deep'),
+            'timeout' => $this->console->arguments->get('timeout'),
+            'savePath' => $this->console->arguments->get('outputPath'),
         ];
     }
 
@@ -58,22 +100,15 @@ class Console
      */
     protected function getUrls()
     {
-        $options = ['file', 'console'];
+        $input = $this->console->input('Please choose the url source: [1-file / 2-console]');
 
-        $response = $this->console->radio('Please choose the url source:', $options)->prompt();
+        $input->accept(['1', '2']);
 
-        switch ($response) {
-            case 'file':
-                return $this->getSourceFromFile();
-
-            case 'console':
-                return $this->getSourceFromConsole();
-
-            default:
-                $this->console->to('error')->red('Incorrect input.');
-
-                exit();
+        if ('1' === $input->prompt()) {
+            return $this->getSourceFromFile();
         }
+
+        return $this->getSourceFromConsole();
     }
 
     /**
@@ -85,7 +120,7 @@ class Console
     {
         $path = realpath($this->console->input('Please enter the file path:')->prompt());
 
-        if (false === $path || ! file_exists($path)) {
+        if (false === $path || ! is_file($path)) {
             $this->console->red('File not found.');
 
             exit();
@@ -152,7 +187,9 @@ class Console
     protected function outputResult($path, $results)
     {
         if ('stdout' === $path) {
-            $this->console->json($results);
+            $this->console->border();
+
+            $this->outputToConsole($results);
         } else {
             if (! ends_with($path, '/')) {
                 $path = $path.'/';
@@ -160,5 +197,50 @@ class Console
 
             file_put_contents($path.'result.json', json_encode($results));
         }
+    }
+
+    /**
+     * Output the validate results to console.
+     *
+     * @param array|string $results
+     * @param int $tab
+     * @param int $recursive
+     */
+    protected function outputToConsole($results, $tab = 0, $recursive = 0)
+    {
+        if (! is_array($results)) {
+            $this->tab($tab)->out($results);
+        } else {
+            foreach ($results as $key => $value) {
+                if (is_array($value) && 0 === count($value)) {
+                    return;
+                } elseif (is_int($key) && ! is_array($value)) {
+                    $this->tab($tab)->out($value);
+                } else {
+                    $this->tab($tab)->out($key);
+
+                    $this->outputToConsole($value, $tab + 1, $recursive + 1);
+
+                    if (0 === $recursive) {
+                        $this->console->br();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Inserts tabs before a line.
+     *
+     * @param int $tab
+     * @return CLImate
+     */
+    protected function tab($tab)
+    {
+        if ($tab > 0) {
+            $this->console->tab($tab);
+        }
+
+        return $this->console;
     }
 }
