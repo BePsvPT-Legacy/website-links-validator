@@ -28,11 +28,13 @@ composer require bepsvpt/website-links-validator
 $result = Bepsvpt\WebsiteLinksValidator\Validator::validate('https://www.google.com/', $config = []);
 ```
 
-or you can execute the validator from terminal, the result will save to result.json
+Or you can execute the validator from terminal, the result will save to result.json at current directory
 
 ```bash
 php validate.php
 ```
+
+Use -h argument to show the usage. 
 
 ## Config
 
